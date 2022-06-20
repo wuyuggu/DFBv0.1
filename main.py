@@ -17,7 +17,7 @@ import discord
 from discord import app_commands
 from discord.ui import Button, View
 
-# Mantener vivo el bot
+# Keep the bot alive
 from keep_alive import keep_alive
 
 
@@ -33,15 +33,15 @@ intents = discord.Intents.all()
 serverId = myServerID
 
 
-# connection with dicord
+# connection with Dicord
 
 class aclient(discord.Client):
-    # poner los intents y constructor
+    # discord bot intents and constructor
     def __init__(self):
         super().__init__(intents=intents)
         self.synced = False
 
-    # al iniciar
+    # at the beginning
     async def on_ready(self):
         await self.wait_until_ready()
         if not self.synced:
@@ -58,9 +58,9 @@ tree = app_commands.CommandTree(client)
 # FUNCS
 
 def run():
-  # iniciar el servidor para mantenerlo vivo
+  # start the server to keep alive the bot
   keep_alive()
-  # iniciar el bot con el TOKEN
+  # start the bot with the token
   client.run(os.environ['TOKEN'])
 
 
@@ -68,8 +68,8 @@ def run():
 # CLASSES https://www.youtube.com/watch?v=kNUuYEWGOxA&t=63s&ab_channel=CodeWithSwastik
 
 # elementos
-# fuego > planta > agua > fuego
-# order: fuego, agua, planta
+# fire > grass > water > fire
+# order: fire, water, grass
 
 class Resistencia:
 
@@ -151,13 +151,16 @@ class Passive():
 # se podria hacer una tienda rollo para comprar cosas
 # clase ataques (daño base, elem)
 
+# inherit from discord.ui.View to manage button interactions
 class MyView(View):
 
+  # attack interaction
   @discord.ui.button(emoji="⚔️")
   async def atk_callback(self, interaction, button):
     await interaction.response.send_message("Has atacado.")
     #print("ataque")
-  
+
+  # defense interaction
   @discord.ui.button(emoji="🛡️")
   async def def_callbackk(self, interaction, button):
     await interaction.response.send_message("Te has defendido.")
@@ -169,51 +172,51 @@ class MyView(View):
 # mirar el dueño y en que canal lo esta haciendo o algo asi
 # https://stackoverflow.com/questions/63705538/how-to-handle-multiple-users-using-same-command-discord-py
 
-#clase dueño para saber quien tiene el bot
-class Duenio:
+#Owner class to know who has the bot in each time
+class Owner:
 
     user = None
 
     def __init__(self):
         pass
-    
+
+      
 # MAIN 
 
 def main():
 
-  # Mirar lo de meter un field dentro del embed
-  # Crear clases myBtn por ejemplo MyButtonAtk y meter dentro las callback
-  # O Hacerlo por view y meterle dentro los MyButton
-
+  # test command to see if the buttons r working
   @tree.command(name="boton",
                 description="boton",
                 guild=discord.Object(id=serverId))
   async def boton(interaction: discord.Integration):
 
-    # crea una view para enviarla en el mensaje
+    # create a myView to manage button interactions
     view = MyView()
 
-    # crea el embed donde pondra la imagen
+    # create the embed where the image and the info of the monster will go
     em = discord.Embed(title="titulo", description='descripcion', color=0xAE0808)
-    # añadir footer (puedes poner texto e img)
+    # add footer (text or imgs)
     em.set_footer(text=f'footer')
-    # convierte en un archivo para dc
+    # convert the img to a discord file
     f = discord.File("img/img.png", filename="img.png") 
-    # pega la img
+    # attach the img
     em.set_image(url="attachment://img.png")
 
     await interaction.response.send_message(view=view, file=f, embed=em)
 
-  
+    
+  # create a character for a user (TODO save in a db)
   @tree.command(name="create_character",
                 description="Crear el personaje del jugador",
                 guild=discord.Object(id=serverId))
   async def create_character(interaction: discord.Integration, name: str):
 
     # create a new character
-    character = Character(name = name, )
+    #character = Character(name = name, )
+    print('a')
 
-
+  
   run()
 
 
